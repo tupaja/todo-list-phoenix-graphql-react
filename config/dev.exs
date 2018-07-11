@@ -11,7 +11,15 @@ config :todo_list, TodoListWeb.Endpoint,
   debug_errors: true,
   code_reloader: true,
   check_origin: false,
-  watchers: []
+  watchers: [
+    node: [
+      "node_modules/webpack/bin/webpack.js",
+      "--mode",
+      "development",
+      "--watch-stdin",
+      cd: Path.expand("../assets", __DIR__)
+    ]
+  ]
 
 # ## SSL Support
 #
@@ -50,8 +58,6 @@ config :phoenix, :stacktrace_depth, 20
 # Configure your database
 config :todo_list, TodoList.Repo,
   adapter: Ecto.Adapters.Postgres,
-  username: "postgres",
-  password: "postgres",
   database: "todo_list_dev",
   hostname: "localhost",
   pool_size: 10
