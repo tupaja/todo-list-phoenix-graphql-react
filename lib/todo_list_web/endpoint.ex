@@ -37,6 +37,11 @@ defmodule TodoListWeb.Endpoint do
     key: "_todo_list_key",
     signing_salt: "VRghVvrR"
 
+  plug Plug.Parsers,
+    parsers: [:urlencoded, :multipart, :json, Absinthe.Plug.Parser],
+    pass: ["*/*"],
+    json_decoder: Poison
+
   plug TodoListWeb.Router
 
   @doc """
