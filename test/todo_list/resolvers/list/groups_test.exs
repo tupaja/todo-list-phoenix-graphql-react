@@ -3,7 +3,7 @@ defmodule TodoList.Resolvers.List.GroupsTest do
   use TodoListWeb.ConnCase
   import TodoList.Factory
 
-  describe "call" do
+  describe "when the params are correct" do
     test "returns sorted collection of groups for a given list" do
       list = insert(:list, %{})
       group_1 = insert(:group, %{list: list})
@@ -17,8 +17,10 @@ defmodule TodoList.Resolvers.List.GroupsTest do
 
       assert group_ids == [group_1.id, group_2.id, group_3.id]
     end
+  end
 
-    test "returns an error when the list_uuid is not provided" do
+  describe "when the list_uuid is not provided" do
+    test "returns an error" do
       {:error, result } = TodoList.Resolvers.List.Groups.call(%{}, %{})
 
       assert result.errors == [

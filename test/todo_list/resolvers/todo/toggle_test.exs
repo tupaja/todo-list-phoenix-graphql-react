@@ -3,7 +3,7 @@ defmodule TodoList.Resolvers.Todo.ToggleTest do
   use TodoListWeb.ConnCase
   import TodoList.Factory
 
-  describe "call" do
+  describe "when the id is provided" do
     test "toggles the value of the completed field" do
       todo = insert(:todo, %{completed: true})
 
@@ -40,8 +40,10 @@ defmodule TodoList.Resolvers.Todo.ToggleTest do
       assert parent_3.locked == false
       assert result.completed == true
     end
+  end
 
-    test "returns error if the id is not provided" do
+  describe "when the id is not provided" do
+    test "returns error" do
       {:error, result } = TodoList.Resolvers.Todo.Toggle.call(%{}, %{})
 
       assert result.errors == [

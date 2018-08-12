@@ -3,8 +3,8 @@ defmodule TodoList.Resolvers.Group.CreateTest do
   use TodoListWeb.ConnCase
   import TodoList.Factory
 
-  describe "call" do
-    test "returns error when title or list_uuid are not provided" do
+  describe "when the title or list_uuid are not provided" do
+    test "returns errors" do
       {:error, result} = TodoList.Resolvers.Group.Create.call(%{
       }, %{})
       assert result.errors == [
@@ -12,8 +12,10 @@ defmodule TodoList.Resolvers.Group.CreateTest do
         title: {"can't be blank", [validation: :required]}
       ]
     end
+  end
 
-    test "returns error when list with given uuid is not found" do
+  describe "when the list with a given uuid is not found" do
+    test "returns an error" do
       {:error, result} = TodoList.Resolvers.Group.Create.call(%{
         list_uuid: "c95e409c-9c94-4c80-be57-001aebea42ae",
         title: "Awesome group"
@@ -22,7 +24,9 @@ defmodule TodoList.Resolvers.Group.CreateTest do
         list: {"can't find list with the provided uuid", [validation: :required]}
       ]
     end
+  end
 
+  describe "when the params are correct" do
     test "inserts a new group record for the given list" do
       list = insert(:list, %{})
       list_uuid = TodoList.Repo.get(TodoList.List, list.id).uuid
