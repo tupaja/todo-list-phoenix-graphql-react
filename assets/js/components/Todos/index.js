@@ -11,7 +11,7 @@ const handleClick = (todo, callback) => {
   callback({ variables: { id: todo.id } });
 };
 
-class Todos extends Component {
+export class Todos extends Component {
   getGroup() {
     const { groups, match } = this.props;
     return find(groups, { uuid: match.params.groupUuid });
