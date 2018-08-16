@@ -3,10 +3,9 @@ import PropTypes from "prop-types";
 import { NavLink } from "react-router-dom";
 import { withRouter } from "react-router";
 import GroupForm from "components/GroupForm";
+import { getGroupUrl } from "utils";
 
-const getGroupUrl = (listUuid, groupUuid) => `/l/${listUuid}/g/${groupUuid}`;
-
-const Groups = ({ elements, match, query }) => (
+export const Groups = ({ elements, match, query }) => (
   <React.Fragment>
     {elements.map(group => (
       <NavLink
@@ -15,7 +14,6 @@ const Groups = ({ elements, match, query }) => (
         className="panel-block"
         key={group.id}
       >
-        {" "}
         {group.title}
       </NavLink>
     ))}

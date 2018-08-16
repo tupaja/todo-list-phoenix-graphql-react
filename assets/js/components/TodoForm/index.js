@@ -18,7 +18,7 @@ const getOptions = groups => groups.map(group => ({
   }))
 }));
 
-class TodoForm extends Component {
+export class TodoForm extends Component {
   addTodo = (cache, { data: { createTodo } }) => {
     const { group } = this.props;
     const oldGroup = cache.readFragment({

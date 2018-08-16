@@ -4,11 +4,10 @@ import { Mutation } from "react-apollo";
 import serialize from "form-serialize";
 import { withRouter } from "react-router";
 import { CREATE_GROUP } from "queries/group";
+import { getGroupUrl } from "utils";
 
-const getGroupUrl = (listUuid, groupUuid) => `/l/${listUuid}/g/${groupUuid}`;
-
-class GroupForm extends Component {
-  addGroup = (cache, { data: { createGroup } }) => {
+export class GroupForm extends Component {
+  createGroup = (cache, { data: { createGroup } }) => {
     const { query, match, history } = this.props;
     const { groups } = cache.readQuery({
       query,
@@ -37,7 +36,7 @@ class GroupForm extends Component {
 
   render() {
     return (
-      <Mutation mutation={CREATE_GROUP} update={this.addGroup}>
+      <Mutation mutation={CREATE_GROUP} update={this.createGroup}>
         {createGroup => (
           <form
             className="panel-block"

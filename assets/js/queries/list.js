@@ -1,6 +1,6 @@
 import gql from "graphql-tag";
 
-export const ADD_LIST = gql`
+export const CREATE_LIST = gql`
   mutation {
     createList {
       id

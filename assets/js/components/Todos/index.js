@@ -17,7 +17,7 @@ export class Todos extends Component {
     return find(groups, { uuid: match.params.groupUuid });
   }
 
-  renderList = (elements) => {
+  renderTodos = (elements) => {
     const { refetch } = this.props;
     if (elements) {
       return elements.map(todo => (
@@ -58,7 +58,7 @@ export class Todos extends Component {
           <p className="panel-heading">
             Todos
           </p>
-          {this.renderList(group.todos)}
+          {this.renderTodos(group.todos)}
           <TodoForm group={group} groups={groups} />
         </React.Fragment>
       );

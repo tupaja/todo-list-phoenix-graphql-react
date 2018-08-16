@@ -6,7 +6,7 @@ import Groups from "components/Groups";
 import Todos from "components/Todos";
 import { LIST_GROUPS } from "queries/list";
 
-const List = ({ match }) => (
+export const List = ({ match }) => (
   <Query query={LIST_GROUPS} variables={{ listUuid: match.params.listUuid }}>
     {({ loading, error, data, refetch }) => {
       if (loading) {

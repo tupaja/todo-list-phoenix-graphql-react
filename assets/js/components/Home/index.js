@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { Mutation } from "react-apollo";
-import { ADD_LIST } from "queries/list";
+import { CREATE_LIST } from "queries/list";
 
 class Home extends Component {
   redirectToList = (data) => {
@@ -11,13 +11,13 @@ class Home extends Component {
 
   render() {
     return (
-      <Mutation mutation={ADD_LIST} onCompleted={this.redirectToList}>
-        {addList => (
+      <Mutation mutation={CREATE_LIST} onCompleted={this.redirectToList}>
+        {createList => (
           <div className="container">
             <h1 className="title">
               Create your list!
             </h1>
-            <button type="button" className="button" onClick={addList}>
+            <button type="button" className="button" onClick={createList}>
               Create
             </button>
           </div>
