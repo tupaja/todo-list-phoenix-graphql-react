@@ -39,9 +39,12 @@ defmodule TodoList.Mixfile do
       {:ex_machina, "~> 2.2"},
       {:gettext, "~> 0.11"},
       {:phoenix, "~> 1.3.3"},
-      {:phoenix_ecto, "~> 3.2"},
+      {:phoenix_ecto, "~> 3.2",
+        git: "https://github.com/phoenixframework/phoenix_ecto",
+        ref: "c45ed42470b47b1f73d85aef7815659cfe37a788"
+      },
       {:phoenix_html, "~> 2.10"},
-      {:phoenix_live_reload, "~> 1.0", only: :dev},
+      {:phoenix_live_reload, "~> 1.0", only: [:dev, :cypress]},
       {:phoenix_pubsub, "~> 1.0"},
       {:poison, "~> 3.1.0"},
       {:postgrex, ">= 0.0.0"}

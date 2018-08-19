@@ -6,6 +6,10 @@ defmodule TodoList.Application do
   def start(_type, _args) do
     import Supervisor.Spec
 
+    workers =
+      Application.get_env(:todo_list, :workers)
+      |> Enum.map(&worker(TodoList.Executable, [&1]))
+
     # Define workers and child supervisors to be supervised
     children = [
       # Start the Ecto repository
@@ -14,7 +18,8 @@ defmodule TodoList.Application do
       supervisor(TodoListWeb.Endpoint, []),
       # Start your own worker by calling: TodoList.Worker.start_link(arg1, arg2, arg3)
       # worker(TodoList.Worker, [arg1, arg2, arg3]),
-    ]
+    ] ++ workers
+
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options

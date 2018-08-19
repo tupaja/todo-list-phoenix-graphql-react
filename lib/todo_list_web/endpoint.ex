@@ -3,6 +3,14 @@ defmodule TodoListWeb.Endpoint do
 
   socket "/socket", TodoListWeb.UserSocket
 
+  if Application.get_env(:todo_list, :sql_sandbox) do
+    plug Phoenix.Ecto.SQL.Sandbox,
+      at: "/sandbox",
+      header: "x-session-id",
+      repo: TodoList.Repo,
+      timeout: 500_000
+  end
+
   # Serve at "/" the static files from "priv/static" directory.
   #
   # You should set gzip to true if you are running phoenix.digest

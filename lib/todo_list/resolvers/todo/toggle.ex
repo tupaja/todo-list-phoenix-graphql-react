@@ -3,7 +3,6 @@ defmodule TodoList.Resolvers.Todo.Toggle do
 
   def call(%{id: id}, _info) do
     todo = TodoList.Repo.get(TodoList.Todo, id)
-
     {:ok, result} = Multi.new
     |> Multi.update(:toggle_todo, TodoList.Todo.toggle_changeset(todo, %{completed: !todo.completed}))
     |> Multi.run(:update_todos, fn %{toggle_todo: toggle_todo} ->

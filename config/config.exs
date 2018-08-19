@@ -17,6 +17,8 @@ config :todo_list, TodoListWeb.Endpoint,
   pubsub: [name: TodoList.PubSub,
            adapter: Phoenix.PubSub.PG2]
 
+config :todo_list, :workers, []
+
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",

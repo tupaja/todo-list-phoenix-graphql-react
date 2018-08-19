@@ -42,7 +42,7 @@ export class GroupForm extends Component {
             className="panel-block"
             onSubmit={event => this.handleSubmit(event, createGroup)}
           >
-            <input className="input" name="title" type="text" />
+            <input data-test="group-title" className="input" name="title" type="text" />
           </form>
         )}
       </Mutation>
