@@ -1,0 +1,161 @@
+version: 2
+dockers:
+- &main_image
+  image: circleci/elixir:1.6-node-browsers
+  environment:
+    MIX_ENV: test
+- &cypress_image
+  image: circleci/elixir:1.6-node-browsers
+  environment:
+    MIX_ENV: cypress
+- &node_image
+  image: circleci/node:8.11
+  environment:
+    MIX_ENV: test
+- &database_image
+  image: circleci/postgres:10.1-alpine
+  environment:
+    POSTGRES_USER: postgres
+    POSTGRES_PASSWORD: postgres
+    POSTGRES_DB: todo_list_test
+
+jobs:
+  elixir_dependencies:
+    docker:
+      - *main_image
+    working_directory: ~/app
+    steps:
+      - checkout
+      - run: mix local.hex --force
+      - run: mix local.rebar --force
+      - run: mv config/test.ci.exs config/test.exs
+      - restore_cache:
+          keys:
+            - v1-mix-cache-{{ .Branch }}-{{ checksum "mix.lock" }}
+            - v1-mix-cache-{{ .Branch }}
+            - v1-mix-cache
+      - restore_cache:
+          keys:
+            - v1-build-cache-{{ .Branch }}
+            - v1-build-cache
+      - run: mix do deps.get, compile
+      - save_cache:
+          key: v1-mix-cache-{{ .Branch }}-{{ checksum "mix.lock" }}
+          paths: "deps"
+      - save_cache:
+          key: v1-mix-cache-{{ .Branch }}
+          paths: "deps"
+      - save_cache:
+          key: v1-mix-cache
+          paths: "deps"
+      - save_cache:
+          key: v1-build-cache-{{ .Branch }}
+          paths: "_build"
+      - save_cache:
+          key: v1-build-cache
+          paths: "_build"
+
+  javascript_dependencies:
+    docker:
+      - *node_image
+    working_directory: ~/app
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v3-assets-cache-{{ .Branch }}-{{ checksum "assets/yarn.lock" }}
+            - v3-assets-cache-{{ .Branch }}
+            - v3-assets-cache
+      - run: cd assets && yarn install
+      - save_cache:
+          key: v3-assets-cache-{{ .Branch }}-{{ checksum "assets/yarn.lock" }}
+          paths:
+            - "~/.cache"
+            - "~/.yarn"
+            - "assets/node_modules"
+      - save_cache:
+          key: v3-assets-cache-{{ .Branch }}
+          paths:
+            - "~/.cache"
+            - "~/.yarn"
+            - "assets/node_modules"
+      - save_cache:
+          key: v3-assets-cache
+          paths:
+            - "~/.cache"
+            - "~/.yarn"
+            - "assets/node_modules"
+
+  elixir_tests:
+    docker:
+      - *main_image
+      - *database_image
+    working_directory: ~/app
+    steps:
+      - checkout
+      - run: mix local.hex --force
+      - run: mix local.rebar --force
+      - run: mv config/test.ci.exs config/test.exs
+      - restore_cache:
+          keys:
+            - v1-mix-cache-{{ .Branch }}-{{ checksum "mix.lock" }}
+            - v1-mix-cache-{{ .Branch }}
+            - v1-mix-cache
+      - restore_cache:
+          keys:
+            - v1-build-cache-{{ .Branch }}
+            - v1-build-cache
+      - run:
+          name: Wait for DB
+          command: dockerize -wait tcp://localhost:5432 -timeout 1m
+      - run: mix test
+      - store_test_results:
+          path: _build/test/lib/todo_list
+
+  cypress_tests:
+    docker:
+      - *cypress_image
+      - *database_image
+    working_directory: ~/app
+    steps:
+      - checkout
+      - run: mix local.hex --force
+      - run: mix local.rebar --force
+      - run: mv config/cypress.ci.exs config/cypress.exs
+      - restore_cache:
+          keys:
+            - v1-mix-cache-{{ .Branch }}-{{ checksum "mix.lock" }}
+            - v1-mix-cache-{{ .Branch }}
+            - v1-mix-cache
+      - restore_cache:
+          keys:
+            - v1-build-cache-{{ .Branch }}
+            - v1-build-cache
+      - restore_cache:
+          keys:
+            - v3-assets-cache-{{ .Branch }}-{{ checksum "assets/yarn.lock" }}
+            - v3-assets-cache-{{ .Branch }}
+            - v3-assets-cache
+      - run:
+          name: Wait for DB
+          command: dockerize -wait tcp://localhost:5432 -timeout 1m
+      - run: cd assets && yarn cypress:ci
+      - store_artifacts:
+          path: assets/cypress/videos
+      - store_artifacts:
+          path: assets/cypress/screenshots
+
+workflows:
+  version: 2
+  build:
+    jobs:
+      - elixir_dependencies
+      - javascript_dependencies
+      - elixir_tests:
+          requires:
+            - elixir_dependencies
+      - cypress_tests:
+          requires:
+            - elixir_dependencies
+            - javascript_dependencies
+
