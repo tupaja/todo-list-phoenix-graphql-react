@@ -9,6 +9,4 @@ export const addGroup = (title) => {
   cy.getElement("group-title").type(title).type("{enter}");
 };
 
-export const getTodoInput = (title) => {
-  return cy.contains("label", title).find("input");
-};
+export const getTodoInput = title => cy.contains("label", title).find("input");

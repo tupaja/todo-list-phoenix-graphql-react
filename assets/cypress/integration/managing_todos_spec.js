@@ -107,5 +107,5 @@ describe("Todo List app", () => {
     getTodoInput("Prepare ingredients").should("not.be.disabled").should("be.checked");
     getTodoInput("Get some ice from the fridge").should("not.be.disabled").should("be.checked");
     getTodoInput("Mix everything together").should("not.be.disabled").should("be.checked");
-  })
-})
+  });
+});

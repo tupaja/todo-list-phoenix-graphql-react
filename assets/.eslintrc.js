@@ -8,7 +8,12 @@ module.exports = {
     "jest": true,
     "mount": true,
     "shallow": true,
-    "expect": true
+    "expect": true,
+    "cy": true,
+    "Cypress": true,
+    "fetch": true,
+    "beforeEach": true,
+    "afterEach": true
   },
   "rules": {
     "strict": 0,
@@ -26,6 +31,7 @@ module.exports = {
     "react/react-in-jsx-scope": 0,
     "import/no-named-as-default": 0,
     "react/require-default-props": 0,
+    "func-names": 0,
     "import/no-extraneous-dependencies": [
       "error", {
         "devDependencies": [

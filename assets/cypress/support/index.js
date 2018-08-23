@@ -1,4 +1,4 @@
-import './commands'
+import "./commands";
 
 beforeEach(() => {
   cy.checkoutSession();
@@ -8,11 +8,13 @@ afterEach(() => {
   cy.dropSession();
 });
 
-Cypress.on("window:before:load", win => {
+/* eslint-disable no-param-reassign */
+Cypress.on("window:before:load", (win) => {
   win.fetch = null;
-  var send = win.XMLHttpRequest.prototype.send;
-  win.XMLHttpRequest.prototype.send = function(){
+  const { send } = win.XMLHttpRequest.prototype;
+  win.XMLHttpRequest.prototype.send = function (...args) {
     this.setRequestHeader("x-session-id", Cypress.env("sessionId"));
-    send.apply(this, arguments);
-  }
+    send.apply(this, args);
+  };
 });
+/* eslint-enable no-param-reassign */

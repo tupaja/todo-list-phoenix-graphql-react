@@ -36,12 +36,15 @@ const match = {
 
 const groups = [
   { uuid: "fake-group-1", id: 1, title: "group 1", todos: [] },
-  { uuid: "fake-group-2", id: 2, title: "group 2", todos: [
-    { id: 1, title: "todo 1", completed: true, locked: true },
-    { id: 2, title: "todo 2", completed: true, locked: false },
-    { id: 3, title: "todo 3", completed: false, locked: true },
-    { id: 4, title: "todo 4", completed: false, locked: false }
-  ] },
+  { uuid: "fake-group-2",
+    id: 2,
+    title: "group 2",
+    todos: [
+      { id: 1, title: "todo 1", completed: true, locked: true },
+      { id: 2, title: "todo 2", completed: true, locked: false },
+      { id: 3, title: "todo 3", completed: false, locked: true },
+      { id: 4, title: "todo 4", completed: false, locked: false }
+    ] },
   { uuid: "fake-group-3", id: 3, title: "group 3", todos: [] }
 ];
 
