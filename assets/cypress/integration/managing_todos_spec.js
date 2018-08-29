@@ -1,7 +1,14 @@
-import { addGroup, addTodo, getTodoInput } from "../support/helpers";
+import {
+  addGroup,
+  addTodo,
+  getTodoInput,
+  completeTodo
+} from "../support/helpers";
 
 describe("Todo List app", () => {
   it("allows managing todos with dependencies", () => {
+    cy.server();
+    cy.route("POST", "/api/graphiql").as("request");
     cy.visit("/");
     cy.contains("button", "Create").click();
 
@@ -44,7 +51,7 @@ describe("Todo List app", () => {
     // start checking
     cy.contains("Shopping").click();
 
-    getTodoInput("Go to the ATM").click();
+    completeTodo("Go to the ATM");
 
     getTodoInput("Go to the ATM").should("not.be.disabled").should("be.checked");
     getTodoInput("Buy a bottle of rum").should("not.be.disabled").should("not.be.checked");
@@ -52,7 +59,7 @@ describe("Todo List app", () => {
     getTodoInput("Buy cane sugar").should("not.be.disabled").should("not.be.checked");
     getTodoInput("Buy peppermint").should("not.be.disabled").should("not.be.checked");
 
-    getTodoInput("Buy a bottle of rum").click();
+    completeTodo("Buy a bottle of rum");
 
     getTodoInput("Go to the ATM").should("not.be.disabled").should("be.checked");
     getTodoInput("Buy a bottle of rum").should("not.be.disabled").should("be.checked");
@@ -60,7 +67,7 @@ describe("Todo List app", () => {
     getTodoInput("Buy cane sugar").should("not.be.disabled").should("not.be.checked");
     getTodoInput("Buy peppermint").should("not.be.disabled").should("not.be.checked");
 
-    getTodoInput("Buy limes").click();
+    completeTodo("Buy limes");
 
     getTodoInput("Go to the ATM").should("not.be.disabled").should("be.checked");
     getTodoInput("Buy a bottle of rum").should("not.be.disabled").should("be.checked");
@@ -68,7 +75,7 @@ describe("Todo List app", () => {
     getTodoInput("Buy cane sugar").should("not.be.disabled").should("not.be.checked");
     getTodoInput("Buy peppermint").should("not.be.disabled").should("not.be.checked");
 
-    getTodoInput("Buy cane sugar").click();
+    completeTodo("Buy cane sugar");
 
     getTodoInput("Go to the ATM").should("not.be.disabled").should("be.checked");
     getTodoInput("Buy a bottle of rum").should("not.be.disabled").should("be.checked");
@@ -76,7 +83,7 @@ describe("Todo List app", () => {
     getTodoInput("Buy cane sugar").should("not.be.disabled").should("be.checked");
     getTodoInput("Buy peppermint").should("not.be.disabled").should("not.be.checked");
 
-    getTodoInput("Buy peppermint").click();
+    completeTodo("Buy peppermint");
 
     getTodoInput("Go to the ATM").should("not.be.disabled").should("be.checked");
     getTodoInput("Buy a bottle of rum").should("not.be.disabled").should("be.checked");
@@ -90,19 +97,19 @@ describe("Todo List app", () => {
     getTodoInput("Get some ice from the fridge").should("not.be.disabled").should("not.be.checked");
     getTodoInput("Mix everything together").should("be.disabled").should("not.be.checked");
 
-    getTodoInput("Prepare ingredients").click();
+    completeTodo("Prepare ingredients");
 
     getTodoInput("Prepare ingredients").should("not.be.disabled").should("be.checked");
     getTodoInput("Get some ice from the fridge").should("not.be.disabled").should("not.be.checked");
     getTodoInput("Mix everything together").should("be.disabled").should("not.be.checked");
 
-    getTodoInput("Get some ice from the fridge").click();
+    completeTodo("Get some ice from the fridge");
 
     getTodoInput("Prepare ingredients").should("not.be.disabled").should("be.checked");
     getTodoInput("Get some ice from the fridge").should("not.be.disabled").should("be.checked");
     getTodoInput("Mix everything together").should("not.be.disabled").should("not.be.checked");
 
-    getTodoInput("Mix everything together").click();
+    completeTodo("Mix everything together");
 
     getTodoInput("Prepare ingredients").should("not.be.disabled").should("be.checked");
     getTodoInput("Get some ice from the fridge").should("not.be.disabled").should("be.checked");
